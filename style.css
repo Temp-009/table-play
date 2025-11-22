@@ -31,22 +31,52 @@ body {
     align-items: flex-start; /* important: keeps them side-by-side */
 }
 
+.guide {
+    color: rgb(131, 131, 131);
+}
+.span-2-column{
+    grid-column: span 2;
+}
+
 /* ===== SETTINGS PANEL ===== */
 
 .custom {
     min-width: 400px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #ffffff;
     background: #ffffff;
     border-radius: 5px;
     padding: 15px;
     border: 1px solid #e3e3e3;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-
     display: flex;
     flex-direction: column;
     gap: 10px;
     transition: transform 0.35s ease, opacity 0.25s ease;
     border: 2px solid #7b5dff;
     box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+/* WebKit Browsers */
+.custom::-webkit-scrollbar {
+    width: 10px;  /* Width of vertical scrollbar */
+}
+
+.custom::-webkit-scrollbar-track {
+    background: #f0f0f0; /* Track background */
+    border-radius: 5px;
+}
+
+.custom::-webkit-scrollbar-thumb {
+    background-color: #7b5dff; /* Scrollbar thumb color */
+    border-radius: 5px;
+    border: 2px solid #ffffff; /* Optional padding around thumb */
+}
+
+/* Firefox */
+.custom {
+    scrollbar-width: thin;        /* "auto" or "thin" */
+    scrollbar-color: #7b5dff #f0f0f0; /* thumb track */
 }
 
 .custom h2,
@@ -67,10 +97,12 @@ body {
     transition: 0.2s;
 }
 
-.custom .size {
+.custom .separate {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
+    padding: 5px;
+    border-radius: 5px;
 }
 
 .custom input:focus {
@@ -94,7 +126,7 @@ body {
     background: #6247e5;
 }
 
-.custom #clearTodoBtn{
+.custom .btn-clear{
     background-color: crimson;
 }
 
@@ -149,6 +181,7 @@ body {
     margin: auto;
     border-radius: 5px;
     border: 2px solid #7b5dff;
+    /* border: 2px solid #7b5dffb7; */
     box-shadow: 0 4px 10px rgba(0,0,0,0.08);
     background: white;
 }
@@ -213,7 +246,7 @@ body {
 
 @media (max-width: 1024px) { /* iPad and below */
     body {
-        grid-template-columns: 1fr; /* hide left panel */
+        grid-template-columns: 1fr 1fr;
     }
 
     .custom {
@@ -223,7 +256,7 @@ body {
         width: 260px;
         height: 100vh;
         overflow-y: auto;
-        z-index: 999;
+        z-index: 0;
         transform: translateX(-100%);
         background: #ffffff;
     }
@@ -231,10 +264,10 @@ body {
     .custom.show {
         transform: translateX(0);
     }
-
-    /* Floating button for showing settings */
+}
+@media (min-width: 1024px) { 
     .settings-btn {
-        display: flex;
+        display: none;
     }
 }
 
@@ -242,7 +275,7 @@ body {
 .settings-btn {
     position: fixed;
     bottom: 20px;
-    left: 20px;
+    right: 20px;
     width: 55px;
     height: 55px;
     border-radius: 50%;
@@ -250,7 +283,6 @@ body {
     color: white;
     font-size: 26px;
     border: none;
-    display: none;
     align-items: center;
     justify-content: center;
     cursor: pointer;

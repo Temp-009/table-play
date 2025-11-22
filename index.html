@@ -12,22 +12,46 @@
     <div class="layout">
         <!-- Custom Control Panel -->
         <div class="custom">
-            <h2>Settings</h2>
-            <div class="size">
+            <h2>Custom</h2>
+            <!--  -->
+            <fieldset class="separate">
+                <legend>Custom Your Grid</legend>
                 <label>Rows: <input type="number" id="rowsInput" value="25" min="1" max="75"></label>
                 <label>Columns: <input type="number" id="colsInput" value="25" min="1" max="75"></label>
-            </div>
-            
-            <button id="resizeBtn">Resize Grid</button>
+                <button id="resizeBtn" class="span-2-column">Resize Grid</button>
+            </fieldset>
+            <!--  -->
+            <fieldset class="separate">
+                <legend>Custom Your Cell</legend>
+                <label>width: <input type="number" id="widthInput" value="25" min="1" max="50"></label>
+                <label>height: <input type="number" id="heightInput" value="25" min="1" max="50"></label>
+                <button id="resizeCell" class="span-2-column">Resize Cell</button>
+            </fieldset>
+            <!--  -->
+            <fieldset class="separate">
+                <legend>Generate letter</legend>
+                <p class="guide span-2-column"> 
+                    Auto Generate Mode will generate alphabet in each cell.
+                </p>
+                <button id="clearGenerate" class="btn-clear">Clear Generate</button>
+                <button id="autoGenerate">Auto Generate</button>
+            </fieldset>
+            <fieldset class="separate">
+                <legend>Select Grid Tools</legend>
+                <p class="guide span-2-column">
+                    Turn on this mode to color the grid!
+                </p>
+                <button id="clearSelect" class="btn-clear">Clear Select Mode</button>
+                <button id="select">Select Mode: OFF</button>
+            </fieldset>
             <button id="themeBtn">Dark / Light Mode</button>
-            
             <hr>
             
             <h3>Text List</h3>
             <div id="todo-list"></div>
             <input type="text" id="todoInput" placeholder="Add Word or Text...">
             <div class="wrapper-todo">
-                <button id="clearTodoBtn">🗑️ Clear</button>
+                <button id="clearTodoBtn" class="btn-clear">🗑️ Clear</button>
                 <button id="addTodoBtn">👌 Add</button>
             </div>
         </div>

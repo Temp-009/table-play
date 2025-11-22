@@ -2,14 +2,19 @@
 // Load saved settings on startup
 // ----------------------------
 window.onload = function () {
-    const savedRows = localStorage.getItem("rows");
-    const savedCols = localStorage.getItem("cols");
+    const savedRows = localStorage.getItem("rows") || 25;
+    const savedCols = localStorage.getItem("cols") || 25;
+    const savedWidth = localStorage.getItem("cellWidth") || 25;
+    const savedHeight = localStorage.getItem("cellHeight") || 25;
+
     const savedMode = localStorage.getItem("themeMode");
     const savedTodos = JSON.parse(localStorage.getItem("todoList")) || [];
 
-    // Restore grid inputs
-    if (savedRows) document.getElementById("rowsInput").value = savedRows;
-    if (savedCols) document.getElementById("colsInput").value = savedCols;
+    // Restore grid and witdh height of cell
+    document.getElementById("rowsInput").value = savedRows;
+    document.getElementById("colsInput").value = savedCols;
+    document.getElementById("widthInput").value = savedWidth;
+    document.getElementById("heightInput").value = savedHeight;
 
     // Restore theme
     if (savedMode === "dark") {
@@ -28,7 +33,7 @@ window.onload = function () {
     if (savedRows && savedCols) {
         createGrid(savedRows, savedCols);
     } else {
-        createGrid(25, 25); // default
+        createGrid(savedRows, savedCols, savedWidth, savedHeight); // default
     }
 };
 
@@ -43,6 +48,23 @@ document.getElementById("resizeBtn").addEventListener("click", () => {
     localStorage.setItem("cols", cols);
 
     createGrid(rows, cols);
+});
+
+// ----------------------------
+// Save width height of cell
+// ----------------------------
+document.getElementById("resizeCell").addEventListener("click", () => {
+    const rows = document.getElementById("rowsInput").value;
+    const cols = document.getElementById("colsInput").value;
+
+    const width = document.getElementById("widthInput").value;
+    const height = document.getElementById("heightInput").value;
+
+    // Save width and height if you want persistence
+    localStorage.setItem("cellWidth", width);
+    localStorage.setItem("cellHeight", height);
+
+    createGrid(rows, cols, width, height);
 });
 
 // ----------------------------
@@ -118,38 +140,156 @@ document.getElementById("clearTodoBtn").addEventListener("click", () => {
 // ----------------------------
 // Create Grid
 // ----------------------------
-function createGrid(rows, cols) {
+function createGrid(rows, cols, cellWidth = 25, cellHeight = 25) {
     const grid = document.getElementById("grid-container");
     grid.innerHTML = "";
-
+    
     grid.style.display = "grid";
-    grid.style.gridTemplateRows = `repeat(${rows}, 25px)`;
-    grid.style.gridTemplateColumns = `repeat(${cols}, 25px)`;
-
+    grid.style.gridTemplateRows = `repeat(${rows}, ${cellHeight}px)`;
+    grid.style.gridTemplateColumns = `repeat(${cols}, ${cellWidth}px)`;
+    
     // Load saved grid values
     const savedGrid = JSON.parse(localStorage.getItem("gridData")) || {};
-
+    
     for (let i = 0; i < rows * cols; i++) {
         const cell = document.createElement("div");
         cell.classList.add("grid-cell");
-
+        
         const input = document.createElement("input");
         input.type = "text";
         input.maxLength = 1;
-
-        // Optional: allow only letters A-Z
+        input.style.width = `${cellWidth}px`;
+        input.style.height = `${cellHeight}px`;
+        
+        // Only letters A-Z
         input.addEventListener("input", () => {
             input.value = input.value.toUpperCase().replace(/[^A-Z]/g, '');
-            savedGrid[i] = input.value; // save to object
-            localStorage.setItem("gridData", JSON.stringify(savedGrid)); // save to localStorage
+            savedGrid[i] = input.value;
+            localStorage.setItem("gridData", JSON.stringify(savedGrid));
         });
-
+        
         // Restore saved value if exists
         if (savedGrid[i]) {
             input.value = savedGrid[i];
         }
-
+        
         cell.appendChild(input);
         grid.appendChild(cell);
     }
 }
+
+// ----------------------------
+// Auto Generate
+// ----------------------------
+document.getElementById("autoGenerate").addEventListener("click", () => {
+    const gridCells = document.querySelectorAll(".grid-cell input");
+
+    // Load existing saved grid
+    const savedGrid = JSON.parse(localStorage.getItem("gridData")) || {};
+
+    gridCells.forEach((cellInput, index) => {
+        // Generate random uppercase letter A-Z
+        const randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+
+        // Set value
+        cellInput.value = randomLetter;
+
+        // Save to grid object
+        savedGrid[index] = randomLetter;
+    });
+
+    // Save updated grid to localStorage
+    localStorage.setItem("gridData", JSON.stringify(savedGrid));
+});
+
+// ----------------------------
+// Clear Generate
+// ----------------------------
+document.getElementById("clearGenerate").addEventListener("click", () => {
+    const gridCells = document.querySelectorAll(".grid-cell input");
+
+    // Load saved grid
+    const savedGrid = JSON.parse(localStorage.getItem("gridData")) || {};
+
+    gridCells.forEach((cellInput, index) => {
+        cellInput.value = "";      // Clear the input
+        savedGrid[index] = "";     // Clear from saved grid
+    });
+
+    // Save the cleared grid to localStorage
+    localStorage.setItem("gridData", JSON.stringify(savedGrid));
+});
+
+// ----------------------------
+// Toggle the settings panel on mobile/tablet
+// ----------------------------
+function toggleSettings() {
+    const settingsPanel = document.querySelector('.custom');
+    settingsPanel.classList.toggle('show');
+}
+
+// ----------------------------
+// Select Mode
+// ----------------------------
+let selectMode = false;
+
+const selectBtn = document.getElementById("select");
+const gridContainer = document.getElementById("grid-container");
+
+// Toggle Select Mode
+selectBtn.addEventListener("click", () => {
+    selectMode = !selectMode;
+
+    if (selectMode) {
+        selectBtn.textContent = "Select Mode: ON";
+        // Disable typing in inputs
+        document.querySelectorAll(".grid-cell input").forEach(input => {
+            input.readOnly = true;
+            input.style.cursor = "pointer";
+        });
+    } else {
+        selectBtn.textContent = "Select Mode: OFF";
+        gridContainer.style.cursor = "default";
+        // Enable typing in inputs
+        document.querySelectorAll(".grid-cell input").forEach(input => {
+            input.readOnly = false;
+            input.style.cursor = "default";
+        });
+    }
+});
+
+// Click on cells to toggle purple color in Select Mode
+gridContainer.addEventListener("click", (e) => {
+    if (!selectMode) return; // Only active in Select Mode
+    if (e.target.tagName.toLowerCase() === "input") {
+        const input = e.target;
+        // Toggle purple background
+        if (input.style.backgroundColor === "crimson") {
+            input.style.backgroundColor = "";
+        } else {
+            input.style.backgroundColor = "crimson";
+        }
+    }
+});
+
+// ----------------------------
+// Clear Select Mode
+// ----------------------------
+document.getElementById("clearSelect").addEventListener("click", () => {
+    const gridInputs = document.querySelectorAll(".grid-cell input");
+
+    gridInputs.forEach(input => {
+        input.style.backgroundColor = ""; // Remove purple background
+    });
+
+    // Optionally, also exit Select Mode
+    selectMode = false;
+    const selectBtn = document.getElementById("select");
+    selectBtn.textContent = "Select Mode: OFF";
+    document.getElementById("grid-container").style.cursor = "default";
+
+    // Enable typing again
+    gridInputs.forEach(input => {
+        input.readOnly = false;
+    });
+});
