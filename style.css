@@ -1,0 +1,264 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+li{
+    list-style: none;
+}
+
+/* ===== GLOBAL LAYOUT ===== */
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #f0f2f8;
+    height: 100vh;
+    overflow: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.layout {
+    display: flex;
+    gap: 20px;
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    align-items: flex-start; /* important: keeps them side-by-side */
+}
+
+/* ===== SETTINGS PANEL ===== */
+
+.custom {
+    min-width: 400px;
+    background: #ffffff;
+    border-radius: 5px;
+    padding: 15px;
+    border: 1px solid #e3e3e3;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: transform 0.35s ease, opacity 0.25s ease;
+    border: 2px solid #7b5dff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.custom h2,
+.custom h3 {
+    margin: 0;
+    color: #444;
+    font-weight: 600;
+}
+
+.custom input[type="number"],
+.custom input[type="text"] {
+    width: 100%;
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.custom .size {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.custom input:focus {
+    border-color: #7b5dff;
+    box-shadow: 0 0 3px #a18aff;
+}
+
+.custom button {
+    padding: 10px;
+    background: #7b5dff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: 0.25s ease;
+}
+
+.custom button:hover {
+    background: #6247e5;
+}
+
+.custom #clearTodoBtn{
+    background-color: crimson;
+}
+
+.custom .wrapper-todo{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 10px;
+}
+.custom #todo-list .list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.7);
+    padding-bottom: 2px;
+}
+
+.custom #todo-list .btn-remove {
+    margin-left: 10px;
+    background-color: crimson;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* To-Do items */
+.todo-item {
+    background: #f3f3ff;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #dcdcff;
+}
+
+.todo-item input {
+    transform: scale(1.2);
+}
+
+/* ===== GRID ===== */
+
+#grid-container {
+    display: grid;
+    padding: 10px;
+    width: fit-content;
+    min-width: 400px;
+    min-height: 400px;
+    height: fit-content;
+    margin: auto;
+    border-radius: 5px;
+    border: 2px solid #7b5dff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    background: white;
+}
+
+.grid-cell {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #000000;
+}
+
+.grid-cell input {
+    outline: none;
+    width: 100%;
+    height: 100%;
+    border: none;
+    text-align: center;
+    font-size: 14px;
+    background: transparent;
+}
+
+/* ===== DARK MODE ===== */
+
+.dark {
+    background: #0e0e0e;
+    color: white;
+}
+
+.dark .custom {
+    background: #1a1a1a;
+    border-color: #333;
+    color: white;
+}
+
+.dark #grid-container {
+    border-color: rgba(255, 255, 255, 0.7);
+    background: #222;
+}
+
+.dark .grid-cell {
+    border-color: #555;
+}
+
+.dark .grid-cell input {
+    color: white;
+}
+
+.dark .custom h2,
+.dark .custom h3 {
+    color: #ffffff;
+}
+
+.dark .grid-cell {
+    border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.dark .custom {
+    border: 2px solid rgba(255, 255, 255, 0.7);
+}
+
+
+/* ===== MOBILE / TABLET BEHAVIOR ===== */
+
+@media (max-width: 1024px) { /* iPad and below */
+    body {
+        grid-template-columns: 1fr; /* hide left panel */
+    }
+
+    .custom {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 260px;
+        height: 100vh;
+        overflow-y: auto;
+        z-index: 999;
+        transform: translateX(-100%);
+        background: #ffffff;
+    }
+
+    .custom.show {
+        transform: translateX(0);
+    }
+
+    /* Floating button for showing settings */
+    .settings-btn {
+        display: flex;
+    }
+}
+
+/* Floating Button */
+.settings-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: #7b5dff;
+    color: white;
+    font-size: 26px;
+    border: none;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    z-index: 999;
+    transition: 0.25s;
+}
+
+.settings-btn:hover {
+    background: #6247e5;
+}

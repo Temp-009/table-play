@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <metaviewport" content="width=device-width, initial-scale=1.0">
+    <title>Letter Grid</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <div class="layout">
+        <!-- Custom Control Panel -->
+        <div class="custom">
+            <h2>Settings</h2>
+            <div class="size">
+                <label>Rows: <input type="number" id="rowsInput" value="25" min="1" max="75"></label>
+                <label>Columns: <input type="number" id="colsInput" value="25" min="1" max="75"></label>
+            </div>
+            
+            <button id="resizeBtn">Resize Grid</button>
+            <button id="themeBtn">Dark / Light Mode</button>
+            
+            <hr>
+            
+            <h3>Text List</h3>
+            <div id="todo-list"></div>
+            <input type="text" id="todoInput" placeholder="Add Word or Text...">
+            <div class="wrapper-todo">
+                <button id="clearTodoBtn">🗑️ Clear</button>
+                <button id="addTodoBtn">👌 Add</button>
+            </div>
+        </div>
+        
+        <!-- Grid -->
+        <div id="grid-container"></div>
+    </div>
+    
+    
+    <script src="./script.js"></script>
+    <button class="settings-btn" onclick="toggleSettings()">⚙</button>
+</body>
+</html>
